@@ -27,8 +27,14 @@ void movimiento_usuario();
 /// Funcion para mover todos los valores hacia arriba
 void movimiento_W();
 
+///Funcion para mover todos los valores hacia abajo
+void movimiento_S();
+
 ///Funcion que sume en caso de tener dos casillas del mismo valor
 void suma_W();
+
+///Suma de valores hacia abajo
+void suma_S();
 
 ///Arreclo que recorre el tablero y devuelve la casilla con mayor valor
 int puntaje_maximo();
@@ -50,13 +56,28 @@ int main(){
     prnt_matriz();
 
     do{
-        //puntMax=puntaje_maximo();
+        puntMax=puntaje_maximo();
         movimiento_usuario();
+        //MOVIMINETO HACIA ARRIBA
         if (0 == strcmp(movimiento,"w")){
             movimiento_W();
             suma_W();
             movimiento_W();
             cantVeces=1;
+            if(modifico){
+                posiciones_random(cantVeces);
+                modifico=false;
+            }
+            //MOVIMIENTO HACIA ABAJO
+        }else if (0 == strcmp(movimiento,"s")){
+            movimiento_S();
+            suma_S();
+            movimiento_S();
+            cantVeces=1;
+
+            if (modifico==true){
+                printf("true\n");
+            }
             if(modifico){
                 posiciones_random(cantVeces);
                 modifico=false;
@@ -78,8 +99,8 @@ void msg_bienvenida(){
 void init_tablero(){
     int posX,posY;
 
-    for(posX=0;posX<4;posX++){
-        for(posY=0;posY<4;posY++)
+    for(posY=0;posY<4;posY++){
+        for(posX=0;posX<4;posX++)
             tablero[posX][posY]=0;//Preguntar profe como inicializarlo vacio
     }
 }
@@ -149,8 +170,8 @@ void movimiento_usuario(){
 void movimiento_W(){
     int num;
     int posX, posY, posYF;
-    for(posX=0; posX<4; posX++){
-        for(posY=1; posY<4; posY++){
+    for(posY=1; posY<4; posY++){
+        for(posX=0; posX<4; posX++){
             if(tablero[posX][posY]!=0){
                 num = tablero[posX][posY];
                 posYF=posY;
@@ -173,8 +194,8 @@ void suma_W(){
     int valor, valorF;
     int posX, posY;
 
-    for(posX=0; posX<4; posX++){
-        for(posY=1; posY<4; posY++){
+    for(posY=1; posY<4; posY++){
+        for(posX=0; posX<4; posX++){
 
             valor = tablero[posX][posY];
             valorF = tablero[posX][posY-1];
@@ -189,12 +210,54 @@ void suma_W(){
     }
 }
 
+void movimiento_S(){
+    int num;
+    int posX, posY, posYF;
+    for(posY=2; posY>=0; posY--){
+        for(posX=3; posX>=0; posX--){
+            if(tablero[posX][posY]!=0){
+                num = tablero[posX][posY];
+                posYF=posY;
+                ///Evaluo si hacia Abajo hay un espacio o un numero
+
+                while((posYF+1)<=3 && tablero[posX][posYF+1] == 0){
+                    tablero[posX][posYF]=0;
+                    posYF++;
+                }
+                tablero[posX][posYF]=num;
+                modifico=true;//revisar en que momento se ejecuta IDEM para w
+            }
+        }
+    }
+}
+
+void suma_S(){
+    int valor, valorF;
+    int posX, posY;
+
+    for(posY=2; posY>=0; posY--){
+        for(posX=3; posX>=0; posX--){
+
+            valor = tablero[posX][posY];
+            valorF = tablero[posX][posY+1];
+
+            if(valor!=0 && valor == valorF){
+                tablero[posX][posY+1]=valorF*2;
+                tablero[posX][posY]=0;
+                modifico=true;//Revisar en que momento se ejecuta IDEM para w
+                cantEspacio++;
+            }
+        }
+    }
+}
+
+
 int puntaje_maximo(){
     int posX,posY,max;
 
     max=tablero[0][0];
-    for(posX=0;posX<4;posX++){
-        for(posY=0;posY<4;posY++){
+    for(posY=0;posY<4;posY++){
+        for(posX=0;posX<4;posX++){
             if(tablero[posX][posY]>max){
                 max=tablero[posX][posY];
             }
