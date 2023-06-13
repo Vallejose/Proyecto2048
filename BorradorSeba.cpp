@@ -74,8 +74,16 @@ int main(){
 
 
     puntMax=puntaje_maximo();
+    
+    while(cantEspacio>=0&&puntMax<2048){
 
-    while((puedoJugar=true||cantEspacio>0)&&puntMax<2048){
+        //Test
+        /*if(puedoJugar==true){        
+            printf("Cantidad de espacios:%d, puntaje maximo:%d\n",cantEspacio,puntMax);
+        }else{
+            printf("puntaje maximo:%d, Cantidad de espacios:%d\n",puntMax,cantEspacio);
+        }*/
+
         movimiento_usuario();
 
         //MOVIMINETO HACIA ARRIBA
@@ -125,15 +133,16 @@ int main(){
         }else
             printf("Entrada invalida, vuelva a intentarlo\n");
 
-
+        //printf("Cantidad de espacio:%d\n",cantEspacio);
         if(cantEspacio==0){
             hayMov=hay_mov_disponible();
-            if(hayMov==true){
+            /*if(hayMov==true){
                 printf("Soy true\n");
-            }
-            if(hayMov=false){
-                puedoJugar=false;
-                printf("Hola estoy adentro de hay mov\n");
+                
+            }*/
+            if(hayMov==false){
+                cantEspacio=-1;
+                //printf("Hola estoy adentro de hay mov\n");
             }
         }
 
@@ -164,7 +173,9 @@ void init_tablero(){
 
     for(posY=0;posY<4;posY++){
         for(posX=0;posX<4;posX++)
-            tablero[posX][posY]=0;//Preguntar profe como inicializarlo vacio
+            tablero[posX][posY]=0;
+            tablero[2][2]=1024;
+            tablero[2][1]=1024;
     }
 }
 
